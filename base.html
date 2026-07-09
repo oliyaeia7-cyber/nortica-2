@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}نورتیکا | نوری در مسیر تاریکی تو!{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="icon" type="image/jpeg" href="/static/images/logo.jpg" />
+  <script src="/static/js/theme.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand"><img src="/static/images/logo.jpg" alt="نورتیکا" class="brand-logo" /> نورتیکا</div>
+    <div class="nav-links">
+      <a href="/">ثبت‌نام</a>
+      <a href="/plan">برنامه درسی</a>
+      <a href="/exam">آزمون</a>
+      <a href="/leaderboard">رتبه‌بندی</a>
+      <a href="/pricing">اشتراک</a>
+      <a href="/support">پشتیبانی</a>
+    </div>
+    <button id="theme-toggle-btn" class="theme-toggle">🌙 حالت شب</button>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    نورتیکا، نوری در مسیر تاریکی تو! · © تمامی حقوق محفوظ است.
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

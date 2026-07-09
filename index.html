@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>نورتیکا، نوری در مسیر تاریکی تو!</h1>
+  <p>دستیار هوشمند برنامه‌ریزی تحصیلی برای دانش‌آموزان متوسطه دوم؛ برنامه درسی اختصاصی، آزمون تستی و رتبه‌بندی با جایزه.</p>
+</div>
+
+<div class="card" style="max-width:680px;">
+  <h2>ثبت‌نام و شروع مسیر</h2>
+  <div id="alert-box"></div>
+  <form id="register-form">
+    <div class="form-grid">
+      <div class="field">
+        <label>نام و نام خانوادگی</label>
+        <input type="text" id="full_name" required />
+      </div>
+      <div class="field">
+        <label>شماره تلفن</label>
+        <input type="tel" id="phone" required placeholder="09xxxxxxxxx" />
+      </div>
+      <div class="field">
+        <label>پایه تحصیلی</label>
+        <select id="grade" required>
+          <option value="">انتخاب کنید</option>
+          <option value="دهم">دهم</option>
+          <option value="یازدهم">یازدهم</option>
+          <option value="دوازدهم">دوازدهم</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>گروه تحصیلی (رشته)</label>
+        <select id="field" required>
+          <option value="">انتخاب کنید</option>
+          <option value="ریاضی فیزیک">ریاضی فیزیک</option>
+          <option value="علوم تجربی">علوم تجربی</option>
+          <option value="علوم انسانی">علوم انسانی</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>رشته هدف دانشگاهی</label>
+        <input type="text" id="target_major" placeholder="مثلاً پزشکی، مهندسی کامپیوتر" />
+      </div>
+      <div class="field">
+        <label>دانشگاه هدف</label>
+        <input type="text" id="target_university" placeholder="مثلاً دانشگاه تهران" />
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>ساعت مطالعه در روز (تقریبی)</label>
+        <input type="number" id="daily_hours" min="0.5" max="16" step="0.5" value="3" required />
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <button type="submit" class="btn block">ثبت‌نام و ورود به داشبورد</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById("register-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const alertBox = document.getElementById("alert-box");
+  alertBox.innerHTML = "";
+
+  const payload = {
+    full_name: document.getElementById("full_name").value,
+    phone: document.getElementById("phone").value,
+    grade: document.getElementById("grade").value,
+    field: document.getElementById("field").value,
+    target_major: document.getElementById("target_major").value,
+    target_university: document.getElementById("target_university").value,
+    daily_hours: parseFloat(document.getElementById("daily_hours").value),
+  };
+
+  try {
+    const data = await apiPost("/api/users", payload);
+    setUserId(data.user_id);
+    alertBox.innerHTML = `<div class="alert success">${data.message} در حال انتقال به صفحه برنامه درسی...</div>`;
+    setTimeout(() => (window.location.href = "/plan"), 900);
+  } catch (err) {
+    alertBox.innerHTML = `<div class="alert error">${err.message}</div>`;
+  }
+});
+</script>
+{% endblock %}

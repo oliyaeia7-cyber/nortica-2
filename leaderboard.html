@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>رتبه‌بندی نورتیکا 🏆</h1>
+  <p>بر اساس ساعات مطالعه ثبت‌شده و نتایج آزمون‌ها؛ نفرات اول تا سوم جایزه می‌گیرند!</p>
+</div>
+
+<div id="leaderboard-container" class="card"></div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("leaderboard-container");
+  try {
+    const res = await apiGet("/api/leaderboard");
+    if (!res.leaderboard.length) {
+      container.innerHTML = "<p>هنوز کسی در رتبه‌بندی ثبت نشده است. شروع کن!</p>";
+      return;
+    }
+    container.innerHTML = res.leaderboard
+      .map((u) => {
+        const topClass = u.rank <= 3 ? `top-${u.rank}` : "";
+        const medal = u.rank === 1 ? "🥇" : u.rank === 2 ? "🥈" : u.rank === 3 ? "🥉" : "";
+        return `
+        <div class="leader-row ${topClass}">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span class="rank-badge">${u.rank}</span>
+            <div>
+              <div><b>${u.full_name}</b> ${medal}</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);">${u.field} - پایه ${u.grade}</div>
+            </div>
+          </div>
+          <div style="text-align:left;">
+            <div>⏱ ${u.total_hours} ساعت مطالعه</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);">میانگین آزمون: ${u.avg_score}%</div>
+            ${u.prize ? `<div class="badge-note">🎁 جایزه: ${u.prize}</div>` : ""}
+          </div>
+        </div>`;
+      })
+      .join("");
+  } catch (err) {
+    container.innerHTML = `<div class="alert error">${err.message}</div>`;
+  }
+});
+</script>
+{% endblock %}

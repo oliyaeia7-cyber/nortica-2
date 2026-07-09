@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>پشتیبانی نورتیکا</h1>
+  <p>سوالی داری؟ برای ما بنویس یا پاسخ سوالات پرتکرار را ببین.</p>
+</div>
+
+<div class="card" style="max-width:640px;">
+  <h3>ارسال پیام به پشتیبانی</h3>
+  <div id="alert-box"></div>
+  <form id="support-form">
+    <div class="form-grid">
+      <div class="field">
+        <label>نام</label>
+        <input type="text" id="s_name" required />
+      </div>
+      <div class="field">
+        <label>شماره تماس</label>
+        <input type="tel" id="s_phone" required />
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>موضوع</label>
+        <input type="text" id="s_subject" required />
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>پیام</label>
+        <textarea id="s_message" rows="4" required></textarea>
+      </div>
+    </div>
+    <button type="submit" class="btn block" style="margin-top:16px;">ارسال پیام</button>
+  </form>
+</div>
+
+<div class="card" id="faq-card">
+  <h3>سوالات پرتکرار</h3>
+  <div id="faq-list"></div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById("support-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const alertBox = document.getElementById("alert-box");
+  try {
+    const data = await apiPost("/api/support", {
+      name: document.getElementById("s_name").value,
+      phone: document.getElementById("s_phone").value,
+      subject: document.getElementById("s_subject").value,
+      message: document.getElementById("s_message").value,
+    });
+    alertBox.innerHTML = `<div class="alert success">${data.message}</div>`;
+    document.getElementById("support-form").reset();
+  } catch (err) {
+    alertBox.innerHTML = `<div class="alert error">${err.message}</div>`;
+  }
+});
+
+(async () => {
+  try {
+    const res = await apiGet("/api/support/faq");
+    document.getElementById("faq-list").innerHTML = res.faq
+      .map((f) => `<div class="day-card"><b>${f.q}</b><p style="margin:8px 0 0;color:var(--text-muted);">${f.a}</p></div>`)
+      .join("");
+  } catch (e) {}
+})();
+</script>
+{% endblock %}

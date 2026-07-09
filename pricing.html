@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>پلن‌های اشتراک نورتیکا</h1>
+  <p>پرداخت در این نسخه به صورت نمادین (آزمایشی) انجام می‌شود.</p>
+</div>
+
+<div class="pricing-grid" id="pricing-grid"></div>
+<div id="alert-box" class="card" style="display:none;"></div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const grid = document.getElementById("pricing-grid");
+  try {
+    const res = await apiGet("/api/subscription/plans");
+    grid.innerHTML = res.plans
+      .map(
+        (p) => `
+      <div class="price-card">
+        <h3>${p.title}</h3>
+        <div class="price">${p.price_label}</div>
+        <p style="color:var(--text-muted);font-size:0.9rem;">${p.description}</p>
+        <button class="btn ${p.price === 0 ? "secondary" : "gold"} subscribe-btn" data-plan="${p.id}">
+          ${p.price === 0 ? "شروع رایگان" : "خرید نمادین"}
+        </button>
+      </div>`
+      )
+      .join("");
+
+    document.querySelectorAll(".subscribe-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const userId = getUserId();
+        const alertBox = document.getElementById("alert-box");
+        alertBox.style.display = "block";
+        if (!userId) {
+          alertBox.innerHTML = `<div class="alert error">لطفاً ابتدا ثبت‌نام کن.</div>`;
+          return;
+        }
+        try {
+          const data = await apiPost("/api/subscription/subscribe", {
+            user_id: parseInt(userId),
+            plan_id: btn.dataset.plan,
+          });
+          alertBox.innerHTML = `<div class="alert success">${data.message}</div>`;
+        } catch (err) {
+          alertBox.innerHTML = `<div class="alert error">${err.message}</div>`;
+        }
+      });
+    });
+  } catch (err) {
+    grid.innerHTML = `<div class="alert error">${err.message}</div>`;
+  }
+});
+</script>
+{% endblock %}

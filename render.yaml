@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: noortika
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>برنامه درسی هوشمند</h1>
+  <p>بر اساس اطلاعات ثبت‌شده، هوش مصنوعی نورتیکا برنامه‌ای اختصاصی برایت می‌سازد.</p>
+</div>
+
+<div class="card">
+  <h2>تنظیمات برنامه</h2>
+  <div class="form-grid">
+    <div class="field">
+      <label>نوع برنامه (بر اساس اشتراک)</label>
+      <select id="plan_type">
+        <option value="week">هفتگی - ساده (رایگان)</option>
+        <option value="month">ماهانه - دقیق‌تر</option>
+        <option value="six_month">شش‌ماهه - کامل</option>
+        <option value="year">یک‌ساله - بسیار قدرتمند</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <h3>افزودن درس دلخواه (اختیاری)</h3>
+    <div id="custom-lessons-list"></div>
+    <div class="form-grid">
+      <div class="field">
+        <label>نام درس</label>
+        <input type="text" id="custom_lesson_name" placeholder="مثلاً کارگاه کارآفرینی" />
+      </div>
+      <div class="field">
+        <label>موضوعات (با کاما جدا کنید)</label>
+        <input type="text" id="custom_lesson_topics" placeholder="مثلاً مبحث ۱, مبحث ۲" />
+      </div>
+    </div>
+    <button type="button" id="add-lesson-btn" class="btn secondary" style="margin-top:10px;">+ افزودن درس</button>
+  </div>
+
+  <div style="margin-top:24px;">
+    <button id="generate-btn" class="btn">ساخت برنامه با هوش مصنوعی نورتیکا</button>
+  </div>
+  <div id="alert-box"></div>
+</div>
+
+<div id="advice-card" class="card" style="display:none;">
+  <h3>💡 توصیه اختصاصی مشاور هوشمند</h3>
+  <p id="advice-text"></p>
+</div>
+
+<div class="card">
+  <h3>ثبت ساعت مطالعه امروز</h3>
+  <div class="form-grid">
+    <div class="field">
+      <label>تعداد ساعت</label>
+      <input type="number" id="log_hours" min="0" step="0.25" />
+    </div>
+    <div class="field">
+      <label>درس (اختیاری)</label>
+      <input type="text" id="log_subject" />
+    </div>
+  </div>
+  <button id="log-btn" class="btn secondary" style="margin-top:12px;">ثبت مطالعه</button>
+  <span id="log-msg" class="badge-note" style="display:none;"></span>
+</div>
+
+<div id="schedule-container"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/plan.js"></script>
+{% endblock %}

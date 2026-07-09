@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>آزمون تستی شبیه‌ساز کنکور</h1>
+  <p>درس و تعداد سوال دلخواهت را انتخاب کن؛ هوش مصنوعی نورتیکا برایت آزمون طراحی می‌کند.</p>
+</div>
+
+<div class="card" id="setup-card">
+  <div class="form-grid">
+    <div class="field">
+      <label>پایه تحصیلی</label>
+      <select id="exam_grade">
+        <option value="دهم">دهم</option>
+        <option value="یازدهم">یازدهم</option>
+        <option value="دوازدهم">دوازدهم</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>درس</label>
+      <select id="exam_subject"></select>
+    </div>
+    <div class="field">
+      <label>تعداد سوال</label>
+      <select id="exam_count">
+        <option value="5">۵ سوال</option>
+        <option value="10" selected>۱۰ سوال</option>
+        <option value="15">۱۵ سوال</option>
+        <option value="20">۲۰ سوال</option>
+      </select>
+    </div>
+  </div>
+  <button id="start-exam-btn" class="btn" style="margin-top:16px;">شروع آزمون</button>
+  <div id="alert-box"></div>
+</div>
+
+<div id="quiz-container"></div>
+
+<div id="result-card" class="card" style="display:none;">
+  <h3>نتیجه آزمون</h3>
+  <p id="result-text"></p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/exam.js"></script>
+{% endblock %}
